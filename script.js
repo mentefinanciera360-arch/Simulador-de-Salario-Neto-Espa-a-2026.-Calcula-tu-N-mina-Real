@@ -1,45 +1,48 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const resultadoDiv = document.getElementById("resultado");
-
-    const observer = new MutationObserver(() => {
-        const texto = resultadoDiv.innerHTML;
-
-        const bruto = parseFloat(texto.match(/Bruto anual: ([\d.]+)/)?.[1] || 0);
-        const ss = parseFloat(texto.match(/Seguridad Social: ([\d.]+)/)?.[1] || 0);
-        const irpf = parseFloat(texto.match(/IRPF aproximado: ([\d.]+)/)?.[1] || 0);
-        const deducciones = parseFloat(texto.match(/Deducciones adicionales: ([\d.]+)/)?.[1] || 0);
-        const neto = parseFloat(texto.match(/Neto anual aproximado: ([\d.]+)/)?.[1] || 0);
-
-        if (bruto > 0) {
-            let canvas = document.getElementById("graficoSalario");
-            if (!canvas) {
-                canvas = document.createElement("canvas");
-                canvas.id = "graficoSalario";
-                resultadoDiv.insertAdjacentElement("afterend", canvas);
-            }
-
-            const ctx = canvas.getContext("2d");
-
-            if (window.myChart) window.myChart.destroy();
-
-            window.myChart = new Chart(ctx, {
-                type: "doughnut",
-                data: {
-                    labels: ["Seguridad Social", "IRPF", "Deducciones", "Neto"],
-                    datasets: [{
-                        data: [ss, irpf, deducciones, neto],
-                        backgroundColor: ["#36a2eb", "#ff6384", "#ffcd56", "#4bc0c0"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: "bottom" },
-                        tooltip: { enabled: true }
-                    }
-                }
-            });
-        }
-    });
-
-    observer.observe(resultadoDiv, { childList: true });
-});
+body {
+  font-family: Arial;
+  background: #f4f6f8;
+  padding: 20px;
+}
+h1 {
+  text-align: center;
+}
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+label {
+  display: block;
+  margin-top: 15px;
+}
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+}
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+button:hover {
+  background: #0056b3;
+}
+.resultado {
+  margin-top: 20px;
+  background: #e9f5ff;
+  padding: 15px;
+  border-radius: 5px;
+  display: none;
+}
+.nota {
+  font-size: 12px;
+  color: #555;
+  margin-top: 10px;
+}
