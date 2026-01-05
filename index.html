@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Salario Neto España 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+        h1 { color: #2c3e50; }
+        form { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; }
+        label { display: block; margin-top: 10px; }
+        input, select { width: 100%; padding: 8px; margin-top: 5px; }
+        button { margin-top: 15px; padding: 10px 20px; background-color: #2c3e50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #34495e; }
+        #resultado { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Simulador de Salario Neto España 2026</h1>
+    <p>Calcula tu salario neto en España de manera rápida y precisa según tu salario bruto, hijos y comunidad autónoma.</p>
+
+    <form id="simulador">
+        <label>Salario Bruto Anual (€):
+            <input type="number" id="bruto" required>
+        </label>
+
+        <label>Tipo de contrato:
+            <select id="contrato">
+                <option value="indefinido">Indefinido</option>
+                <option value="temporal">Temporal</option>
+            </select>
+        </label>
+
+        <label>Número de pagas:
+            <input type="number" id="pagas" value="12">
+        </label>
+
+        <label>Número de hijos:
+            <input type="number" id="hijos" value="0">
+        </label>
+
+        <label>Comunidad Autónoma:
+            <select id="comunidad">
+                <option value="andalucia">Andalucía</option>
+                <option value="aragon">Aragón</option>
+                <option value="asturias">Asturias</option>
+                <option value="baleares">Islas Baleares</option>
+                <option value="canarias">Canarias</option>
+                <option value="cantabria">Cantabria</option>
+                <option value="castillaleon">Castilla y León</option>
+                <option value="castillalamancha">Castilla-La Mancha</option>
+                <option value="cataluña">Cataluña</option>
+                <option value="ceuta">Ceuta</option>
+                <option value="extremadura">Extremadura</option>
+                <option value="galicia">Galicia</option>
+                <option value="laRioja">La Rioja</option>
+                <option value="madrid">Madrid</option>
+                <option value="melilla">Melilla</option>
+                <option value="murcia">Murcia</option>
+                <option value="navarra">Navarra</option>
+                <option value="paisvasco">País Vasco</option>
+                <option value="valencia">Comunidad Valenciana</option>
+            </select>
+        </label>
+
+        <button type="button" onclick="calcularNeto()">Calcular</button>
+    </form>
+
+    <h2>Resultado:</h2>
+    <p id="resultado"></p>
+
+    <script>
+        function calcularNeto() {
+            let bruto = parseFloat(document.getElementById('bruto').value);
+            let hijos = parseInt(document.getElementById('hijos').value);
+            let pagas = parseInt(document.getElementById('pagas').value);
+            let contrato = document.getElementById('contrato').value;
+            let comunidad = document.getElementById('comunidad').value;
+
+            // Cotizaciones de Seguridad Social (aprox 6.35%)
+            let cotizacion = bruto * 0.0635;
+
+            // IRPF aproximado por tramos (simplificado)
+            let irpfBase = 0.15; // 15% por defecto
+            if (bruto < 12000) irpfBase = 0.10;
+            else if (bruto < 20000) irpfBase = 0.12;
+            else if (bruto < 35000) irpfBase = 0.15;
+            else if (bruto < 60000) irpfBase = 0.20;
+            else irpfBase = 0.25;
+
+            // Deducción por hijos: 1% por hijo
+            let deduccionHijos = hijos * 0.01;
+
+            // Ajuste por comunidad (simplificado, solo ejemplo)
+            let ajusteComunidad = 0;
+            if (comunidad === "madrid") ajusteComunidad = -0.02; // Madrid menos IRPF
+            if (comunidad === "cataluña") ajusteComunidad = 0.01;
+
+            let irpf = bruto * (irpfBase - deduccionHijos + ajusteComunidad);
+            if (irpf < 0) irpf = 0;
+
+            let netoAnual = bruto - cotizacion - irpf;
+            let netoMensual = netoAnual / pagas;
+
+            document.getElementById('resultado').innerText = 
+                `Salario neto anual: €${netoAnual.toFixed(2)}\nSalario neto mensual: €${netoMensual.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
