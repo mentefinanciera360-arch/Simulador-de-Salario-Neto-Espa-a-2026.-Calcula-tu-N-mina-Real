@@ -1,114 +1,172 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Salario Neto España 2026</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
-        }
-        h1 { color: #2c3e50; }
-        form { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; }
-        label { display: block; margin-top: 10px; }
-        input, select { width: 100%; padding: 8px; margin-top: 5px; }
-        button { margin-top: 15px; padding: 10px 20px; background-color: #2c3e50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #34495e; }
-        #resultado { margin-top: 20px; font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<title>Simulador Salario Neto España</title>
+<style>
+body { font-family: Arial; background:#f4f6f8; padding:20px; }
+h1 { text-align:center; }
+.container { max-width:500px; margin:auto; background:white; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+label { display:block; margin-top:15px; }
+input, select, button { width:100%; padding:10px; margin-top:5px; }
+button { background:#007bff; color:white; border:none; border-radius:5px; margin-top:20px; cursor:pointer; }
+button:hover { background:#0056b3; }
+.resultado { margin-top:20px; background:#e9f5ff; padding:15px; border-radius:5px; display:none; }
+.nota { font-size:12px; color:#555; margin-top:10px; }
+</style>
+
+<!-- CSS externo para estilos modernos -->
+<link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-    <h1>Simulador de Salario Neto España 2026</h1>
-    <p>Calcula tu salario neto en España de manera rápida y precisa según tu salario bruto, hijos y comunidad autónoma.</p>
 
-    <form id="simulador">
-        <label>Salario Bruto Anual (€):
-            <input type="number" id="bruto" required>
-        </label>
+<h1>💰 Simulador Salario Neto España</h1>
 
-        <label>Tipo de contrato:
-            <select id="contrato">
-                <option value="indefinido">Indefinido</option>
-                <option value="temporal">Temporal</option>
-            </select>
-        </label>
+<div class="container">
+<label>Salario bruto anual (€)</label>
+<input type="number" id="bruto" placeholder="Ej: 30000">
 
-        <label>Número de pagas:
-            <input type="number" id="pagas" value="12">
-        </label>
+<label>Tipo de contrato</label>
+<select id="contrato">
+  <option value="indefinido">Indefinido</option>
+  <option value="temporal">Temporal</option>
+</select>
 
-        <label>Número de hijos:
-            <input type="number" id="hijos" value="0">
-        </label>
+<label>Número de pagas al año</label>
+<select id="pagas">
+  <option value="12">12</option>
+  <option value="14">14</option>
+</select>
 
-        <label>Comunidad Autónoma:
-            <select id="comunidad">
-                <option value="andalucia">Andalucía</option>
-                <option value="aragon">Aragón</option>
-                <option value="asturias">Asturias</option>
-                <option value="baleares">Islas Baleares</option>
-                <option value="canarias">Canarias</option>
-                <option value="cantabria">Cantabria</option>
-                <option value="castillaleon">Castilla y León</option>
-                <option value="castillalamancha">Castilla-La Mancha</option>
-                <option value="cataluña">Cataluña</option>
-                <option value="ceuta">Ceuta</option>
-                <option value="extremadura">Extremadura</option>
-                <option value="galicia">Galicia</option>
-                <option value="laRioja">La Rioja</option>
-                <option value="madrid">Madrid</option>
-                <option value="melilla">Melilla</option>
-                <option value="murcia">Murcia</option>
-                <option value="navarra">Navarra</option>
-                <option value="paisvasco">País Vasco</option>
-                <option value="valencia">Comunidad Valenciana</option>
-            </select>
-        </label>
+<label>Número de hijos</label>
+<input type="number" id="hijos" value="0" min="0">
 
-        <button type="button" onclick="calcularNeto()">Calcular</button>
-    </form>
+<label>Situación personal</label>
+<select id="situacion">
+  <option value="soltero">Soltero/a</option>
+  <option value="casado">Casado/a</option>
+  <option value="pareja">Pareja sin hijos</option>
+</select>
 
-    <h2>Resultado:</h2>
-    <p id="resultado"></p>
+<label>Deducciones adicionales (€)</label>
+<input type="number" id="deducciones" value="0" min="0">
 
-    <script>
-        function calcularNeto() {
-            let bruto = parseFloat(document.getElementById('bruto').value);
-            let hijos = parseInt(document.getElementById('hijos').value);
-            let pagas = parseInt(document.getElementById('pagas').value);
-            let contrato = document.getElementById('contrato').value;
-            let comunidad = document.getElementById('comunidad').value;
+<label>Comunidad Autónoma</label>
+<select id="comunidad">
+  <option value="andalucia">Andalucía</option>
+  <option value="aragon">Aragón</option>
+  <option value="asturias">Asturias</option>
+  <option value="baleares">Islas Baleares</option>
+  <option value="canarias">Canarias</option>
+  <option value="cantabria">Cantabria</option>
+  <option value="castillalamancha">Castilla-La Mancha</option>
+  <option value="castillaleon">Castilla y León</option>
+  <option value="catalunya">Cataluña</option>
+  <option value="valencia">Comunidad Valenciana</option>
+  <option value="extremadura">Extremadura</option>
+  <option value="galicia">Galicia</option>
+  <option value="madrid">Madrid</option>
+  <option value="murcia">Murcia</option>
+  <option value="navarra">Navarra</option>
+  <option value="rioja">La Rioja</option>
+  <option value="paisvasco">País Vasco</option>
+  <option value="ceuta">Ceuta</option>
+  <option value="melilla">Melilla</option>
+</select>
 
-            // Cotizaciones de Seguridad Social (aprox 6.35%)
-            let cotizacion = bruto * 0.0635;
+<button onclick="calcularSalario()">Calcular</button>
 
-            // IRPF aproximado por tramos (simplificado)
-            let irpfBase = 0.15; // 15% por defecto
-            if (bruto < 12000) irpfBase = 0.10;
-            else if (bruto < 20000) irpfBase = 0.12;
-            else if (bruto < 35000) irpfBase = 0.15;
-            else if (bruto < 60000) irpfBase = 0.20;
-            else irpfBase = 0.25;
+<div class="resultado" id="resultado"></div>
+<div class="nota">
+*Cálculo aproximado basado en cotizaciones y tramos IRPF 2026 España ajustado por comunidad autónoma.
+</div>
+</div>
 
-            // Deducción por hijos: 1% por hijo
-            let deduccionHijos = hijos * 0.01;
+<script>
+function calcularSalario() {
+  const bruto = parseFloat(document.getElementById("bruto").value);
+  const contrato = document.getElementById("contrato").value;
+  const pagas = parseInt(document.getElementById("pagas").value);
+  const hijos = parseInt(document.getElementById("hijos").value);
+  const situacion = document.getElementById("situacion").value;
+  const deducciones = parseFloat(document.getElementById("deducciones").value);
+  const comunidad = document.getElementById("comunidad").value;
 
-            // Ajuste por comunidad (simplificado, solo ejemplo)
-            let ajusteComunidad = 0;
-            if (comunidad === "madrid") ajusteComunidad = -0.02; // Madrid menos IRPF
-            if (comunidad === "cataluña") ajusteComunidad = 0.01;
+  if (isNaN(bruto) || bruto <= 0 || hijos < 0 || deducciones < 0) {
+    alert("Introduce valores válidos");
+    return;
+  }
 
-            let irpf = bruto * (irpfBase - deduccionHijos + ajusteComunidad);
-            if (irpf < 0) irpf = 0;
+  // Cotización Seguridad Social
+  let ssContingencias = 0.047;
+  let desempleo = contrato === "indefinido" ? 0.0155 : 0.016;
+  let formacion = 0.001;
+  const totalSS = bruto * (ssContingencias + desempleo + formacion);
 
-            let netoAnual = bruto - cotizacion - irpf;
-            let netoMensual = netoAnual / pagas;
+  // Base IRPF
+  const baseIRPF = bruto - totalSS - deducciones;
 
-            document.getElementById('resultado').innerText = 
-                `Salario neto anual: €${netoAnual.toFixed(2)}\nSalario neto mensual: €${netoMensual.toFixed(2)}`;
-        }
-    </script>
+  // Ajustes por comunidad autónoma (aproximados)
+  const ajustesComunidad = {
+    andalucia: 0.0, aragon: 0.005, asturias: 0.008, baleares: 0.012,
+    canarias: -0.005, cantabria: 0.004, castillalamancha: 0.002, castillaleon: 0.001,
+    catalunya: 0.015, valencia: 0.008, extremadura: -0.002, galicia: 0.003,
+    madrid: -0.01, murcia: 0.001, navarra: 0.012, rioja: 0.005, paisvasco: 0.014,
+    ceuta: -0.01, melilla: -0.008
+  };
+  let ajuste = ajustesComunidad[comunidad] || 0;
+
+  // Tramos IRPF base
+  const tramosBase = [
+    { limite: 12450, tipo: 0.19 },
+    { limite: 20200, tipo: 0.24 },
+    { limite: 35200, tipo: 0.30 },
+    { limite: 60000, tipo: 0.37 },
+    { limite: Infinity, tipo: 0.45 }
+  ];
+
+  // Calcular IRPF por tramos
+  let restante = baseIRPF;
+  let irpfCantidad = 0;
+  let limiteAnterior = 0;
+  for (let t of tramosBase) {
+    const tramo = Math.min(restante, t.limite - limiteAnterior);
+    if (tramo > 0) {
+      irpfCantidad += tramo * (t.tipo + ajuste);
+      restante -= tramo;
+      limiteAnterior = t.limite;
+    } else break;
+  }
+
+  // Reducción por hijos
+  let reduccionHijos = Math.min(hijos * 2000, baseIRPF);
+  irpfCantidad = Math.max(irpfCantidad - reduccionHijos * 0.19, 0);
+
+  // Reducción por situación personal
+  if (situacion === "casado") irpfCantidad *= 0.95;
+  else if (situacion === "pareja") irpfCantidad *= 0.97;
+
+  const netoAnual = bruto - totalSS - irpfCantidad - deducciones;
+  const netoMensual = netoAnual / pagas;
+
+  const resultadoDiv = document.getElementById("resultado");
+  resultadoDiv.style.display = "block";
+  resultadoDiv.innerHTML = `
+    <strong>Resultados:</strong><br><br>
+    💼 Bruto anual: ${bruto.toFixed(2)} €<br>
+    🏛 Seguridad Social: ${totalSS.toFixed(2)} €<br>
+    📊 IRPF aproximado: ${irpfCantidad.toFixed(2)} €<br>
+    💰 Deducciones adicionales: ${deducciones.toFixed(2)} €<br><br>
+    <strong>💰 Neto anual aproximado: ${netoAnual.toFixed(2)} €</strong><br>
+    💵 Neto mensual (${pagas} pagas): ${netoMensual.toFixed(2)} €
+  `;
+}
+</script>
+
+<!-- Scripts externos al final del body -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
